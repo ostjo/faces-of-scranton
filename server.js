@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const db = require("./db.js");
 const s3 = require("./s3.js");
+const moment = require("moment");
 
 app.use(express.static("./public"));
 app.use(express.json());
@@ -54,6 +55,10 @@ app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
 app.get("/images.json", (req, res) => {
     db.getImages()
         .then((images) => {
+            // format the date property to the "1 day ago" format via moment
+            images.rows.forEach(
+                (row) => (row.publDate = moment(row.date).fromNow())
+            );
             res.json(images);
         })
         .catch((err) => {

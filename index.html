@@ -19,7 +19,7 @@
         <div class="image" v-if="images.length > 0" v-for="image in images">
             <img :src="image.url" :alt="image.title">
             <h3>{{image.title}}</h3>
-            <p>{{image.date.split('T')[1].slice(0, 5)}} Uhr</p>
+            <p>{{image.publDate}}</p>
         </div>
     </main>
     <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
