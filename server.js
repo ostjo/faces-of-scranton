@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const db = require("./db.js");
+const s3 = require("./s3.js");
 
 app.use(express.static("./public"));
 app.use(express.json());
@@ -36,13 +37,17 @@ const uploader = multer({
 //================================================ ROUTES ================================================//
 
 // The call to single indicates that we are   ↓↓↓↓   only expecting one single file to be uploaded
-app.post("/upload", uploader.single("file"), function (req, res) {
+app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     if (req.file) {
         // it worked!
-        res.sendStatus(200);
+        res.json({
+            success: true,
+        });
     } else {
         // boo hoo
-        res.sendStatus(500);
+        res.json({
+            success: false,
+        });
     }
 });
 
