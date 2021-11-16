@@ -16,3 +16,11 @@ module.exports.getImages = () => {
                     ORDER BY created_at DESC`;
     return db.query(query);
 };
+
+module.exports.addImage = (url, username, title, desc) => {
+    const query = `INSERT INTO images (url, username, title, description)
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING *`;
+    const params = [url, username, title, desc];
+    return db.query(query, params);
+};

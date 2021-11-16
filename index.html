@@ -12,7 +12,8 @@
     <main id="main">
         <div id="upload">
             <input v-model="title" name="title" type="text" placeholder="title">
-            <input name="username" type="text" placeholder="username">
+            <input v-model="desc" name="desc" type="text" placeholder="description">
+            <input v-model="username" name="username" type="text" placeholder="username">
             <input name="file" type="file" accept="image/*" @change="setFile">
             <button @click="upload">upload</button>
         </div>

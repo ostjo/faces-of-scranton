@@ -40,10 +40,23 @@ const uploader = multer({
 // The call to single indicates that we are   ↓↓↓↓   only expecting one single file to be uploaded
 app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     if (req.file) {
-        // it worked!
-        res.json({
-            success: true,
-        });
+        // once we're successfully uploaded to the cloud, we want to
+        // add a new image to the database!
+        const { title, desc, username } = req.body;
+        const url = `https://s3.amazonaws.com/spicedling/` + req.file.filename;
+
+        db.addImage(url, username, title, desc)
+            .then((image) => {
+                image.rows[0].publDate = moment(
+                    image.rows[0].created_at
+                ).fromNow();
+                // we want to send back the newly uploaded image object to our client side
+                res.json(image.rows[0]);
+            })
+            .catch((err) => {
+                console.log("err in addImage on POST /upload: ", err);
+                return res.sendStatus(500);
+            });
     } else {
         // boo hoo
         res.json({
@@ -56,6 +69,7 @@ app.get("/images.json", (req, res) => {
     db.getImages()
         .then((images) => {
             // format the date property to the "1 day ago" format via moment
+            // and store it in the publDate property
             images.rows.forEach(
                 (row) => (row.publDate = moment(row.date).fromNow())
             );
