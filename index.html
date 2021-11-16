@@ -10,6 +10,12 @@
 <body>
     <h1>Image Board</h1>
     <main id="main">
+        <div id="upload">
+            <input v-model="title" name="title" type="text" placeholder="title">
+            <input name="username" type="text" placeholder="username">
+            <input name="file" type="file" accept="image/*" @change="setFile">
+            <button @click="upload">upload</button>
+        </div>
         <div class="image" v-if="images.length > 0" v-for="image in images">
             <img :src="image.url" :alt="image.title">
             <h3>{{image.title}}</h3>
