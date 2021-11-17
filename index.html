@@ -8,21 +8,28 @@
     <title>Image Board</title>
 </head>
 <body>
-    <h1>Image Board</h1>
+    <nav><h1>Blue Da Ba Dee</h1></nav>
     <main id="main">
         <div id="upload">
             <input v-model="title" name="title" type="text" placeholder="title">
             <input v-model="desc" name="desc" type="text" placeholder="description">
             <input v-model="username" name="username" type="text" placeholder="username">
-            <input name="file" type="file" accept="image/*" @change="setFile">
+            <input class="inputfile" id="file" name="file" type="file" accept="image/*" @change="setFile">
+            <label for="file"><span>choose a file</span></label>
             <button @click="upload">upload</button>
         </div>
-        <div class="image" v-if="images.length > 0" v-for="image in images">
-            <img :src="image.url" :alt="image.title">
-            <h3>{{image.title}}</h3>
-            <p>{{image.publDate}}</p>
+        <transition name="fade">
+            <image-modal v-if="selectedImageId" :id="selectedImageId" @close="closeModal"></image-modal>
+        </transition>
+        <div class="images">
+            <div v-if="images.length > 0" v-for="image in images" @click="click(image.id)" class="image" >
+                <img :src="image.url" :alt="image.title">
+                <h3>{{image.title}}</h3>
+                <p>{{image.publDate}}</p>
+            </div>
         </div>
     </main>
     <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
+    <script src="/js/script.js" crossorigin="use-credentials"></script>
 </body>
 </html>

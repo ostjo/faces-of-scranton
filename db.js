@@ -11,7 +11,7 @@ const db = spicedPg(
 console.log("[db] Connecting to: ", database);
 
 module.exports.getImages = () => {
-    const query = `SELECT images.url AS url, images.title AS title, images.created_at AS date
+    const query = `SELECT images.url AS url, images.title AS title, images.created_at AS date, images.id AS id
                     FROM images
                     ORDER BY created_at DESC`;
     return db.query(query);
@@ -23,4 +23,12 @@ module.exports.addImage = (url, username, title, desc) => {
                     RETURNING *`;
     const params = [url, username, title, desc];
     return db.query(query, params);
+};
+
+module.exports.getImageById = (id) => {
+    const query = `SELECT images.url AS url, images.title AS title, 
+                    images.description AS desc, images.username AS username, images.created_at AS date
+                    FROM images
+                    WHERE images.id = $1`;
+    return db.query(query, [id]);
 };

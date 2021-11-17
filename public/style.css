@@ -12,30 +12,157 @@ body {
 
 /*------------------------------------ FONT STYLING ------------------------------------*/
 
-h1 {
-    margin: 0 0 60px 0;
-}
-
 h3 {
     margin: 10px 0;
 }
 
-/*---------------------------------------- MAIN ---------------------------------------*/
+/*--------------------------------------- NAVBAR ---------------------------------------*/
 
-main {
+nav {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    margin-top: 120px;
+    background-color: white;
+    height: 90px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+}
+
+/*----------- UPLOAD INPUT FIELD ------------*/
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+    cursor: pointer;
+}
+
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+#upload {
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+}
+
+/*---------------------------------------- IMAGES ---------------------------------------*/
+
+.images {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     max-width: 100vw;
     grid-column-gap: 30px;
 }
 
-#upload {
-    grid-column: 1 / -1;
-    margin-bottom: 60px;
-}
-
 .image > img {
     object-fit: cover;
     width: 100%;
     aspect-ratio: 1 / 1;
+}
+
+/*---------------------------------------- MODAL ---------------------------------------*/
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox {
+    position: relative;
+    width: 80%;
+    height: 95%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 10px 80px 20px rgba(0, 0, 0, 0.3);
+    display: grid;
+    padding: 30px;
+    grid-column-gap: 25px;
+    grid-template-columns: auto 400px;
+    grid-template-rows: 0.8fr 0.2fr;
+}
+
+.lightbox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    grid-row: 1 / -1;
+}
+
+.lightbox p {
+    align-self: flex-end;
+}
+
+.close {
+    position: absolute;
+    right: 30px;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background: transparent;
+    color: black;
+    font: inherit;
+    text-indent: 100%;
+    cursor: pointer;
+}
+
+.close:before,
+.close:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - 0.0625em);
+    width: 0.125em;
+    height: 70%;
+    border-radius: 0.125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: "";
+}
+
+.close:after {
+    transform: rotate(-45deg);
+}
+
+.close:hover {
+    transform: scale(1.05);
+}
+
+.blur {
+    filter: blur(34px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }

@@ -9,6 +9,11 @@ const moment = require("moment");
 app.use(express.static("./public"));
 app.use(express.json());
 
+// app.use((req, res, next) => {
+//     console.log(req.method);
+//     next();
+// });
+
 //================================================ MULTER SETUP ================================================//
 
 const multer = require("multer");
@@ -77,6 +82,23 @@ app.get("/images.json", (req, res) => {
         })
         .catch((err) => {
             console.log("err in getImages() on GET /images.json", err);
+            res.sendStatus(500);
+        });
+});
+
+app.get("/selected-image/:id", (req, res) => {
+    const { id } = req.params;
+
+    console.log("making request: ", req.params);
+
+    db.getImageById(id)
+        .then((image) => {
+            image.rows[0].publDate = moment(image.rows[0].date).fromNow();
+            // we want to send back the newly uploaded image object to our client side
+            res.json(image.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in getImageById() on GET /selected-image/id", err);
             res.sendStatus(500);
         });
 });
