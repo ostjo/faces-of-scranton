@@ -10,12 +10,16 @@ const db = spicedPg(
 
 console.log("[db] Connecting to: ", database);
 
-module.exports.getImages = () => {
-    const query = `SELECT url, title, created_at AS date, id
+module.exports.getImages = (smallestImageId) => {
+    const query = `SELECT url, title, created_at AS date, id,
+                        (SELECT id FROM images
+                        ORDER BY id ASC
+                        LIMIT 1) AS "lowestId"
                     FROM images
+                    ${smallestImageId ? "WHERE id < $1" : ""}
                     ORDER BY created_at DESC
-                    LIMIT 6`;
-    return db.query(query);
+                    LIMIT 9`;
+    return db.query(query, smallestImageId && [smallestImageId]);
 };
 
 module.exports.addImage = (url, username, title, desc) => {
@@ -27,20 +31,23 @@ module.exports.addImage = (url, username, title, desc) => {
 };
 
 module.exports.getImageById = (id) => {
-    const query = `SELECT url, title, desc, username, created_at AS date
+    const query = `SELECT url, title, description AS desc, username, created_at AS date
                     FROM images
                     WHERE id = $1`;
     return db.query(query, [id]);
 };
 
-module.exports.getNextImages = (smallestImageId) => {
-    const query = `SELECT url, title, id, created_at AS date,
-                        (SELECT id FROM images
-                        ORDER BY id ASC
-                        LIMIT 1) AS "lowestId"
-                    FROM images
-                    WHERE id < $1
-                    ORDER BY id DESC
-                    LIMIT 6`;
-    return db.query(query, [smallestImageId]);
+module.exports.getComments = (selectedImageId) => {
+    const query = `SELECT username, comment, created_at AS date
+                    FROM comments
+                    WHERE image_id = $1`;
+    return db.query(query, [selectedImageId]);
+};
+
+module.exports.addComment = (selectedImageId, username, comment) => {
+    const query = `INSERT INTO comments (image_id, username, comment)
+                    VALUES($1, $2, $3)
+                    RETURNING *`;
+    const params = [selectedImageId, username, comment];
+    return db.query(query, params);
 };

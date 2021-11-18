@@ -31,7 +31,6 @@ export default {
         },
     },
     template: `<div class="modal">
-                    <comments-modal :selected-image-id="selectedImageId"></comments-modal>
                     <div class="lightbox">
                         <img :src="url" :alt="title">
                         <p>Uploaded by {{username}} {{date}}</p>
@@ -40,6 +39,7 @@ export default {
                             <h2>{{title}}</h2>
                             <h4>{{desc}}</h4>
                         </div>
+                        <comments-modal :selected-image-id="selectedImageId"></comments-modal>
                     </div>
                 </div>`,
 };

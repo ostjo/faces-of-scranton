@@ -11,6 +11,7 @@ Vue.createApp({
             file: null,
             id: null,
             selectedImageId: null,
+            moreImages: undefined,
         };
     },
     components: {
@@ -21,7 +22,8 @@ Vue.createApp({
             .then((images) => images.json())
             .then((images) => {
                 this.images = images.rows;
-                console.log("our images:", images);
+                // check whether there are more images to show
+                this.checkLoadMoreButton(images);
             });
     },
     methods: {
@@ -61,14 +63,20 @@ Vue.createApp({
         loadMore() {
             // To get more images from the db:
             // 1. get smallest id of currently shown images
-            const smallestImageId = this.images[this.images.length - 1].id;
+            let smallestImageId = this.images[this.images.length - 1].id;
             // 2. make fetch GET request to server with smallestImageId
             fetch(`/more-images/${smallestImageId}`)
                 .then((images) => images.json())
                 .then((images) => {
-                    console.log("the next images ", images);
                     images.rows.forEach((image) => this.images.push(image));
+                    // check whether there are more images to show
+                    this.checkLoadMoreButton(images);
                 });
+        },
+        checkLoadMoreButton(images) {
+            this.moreImages =
+                this.images[this.images.length - 1].id !==
+                images.rows[0].lowestId;
         },
     },
 }).mount("#main");

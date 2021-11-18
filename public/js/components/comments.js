@@ -9,6 +9,46 @@ export default {
     props: ["selectedImageId"],
     mounted: function () {
         // GET request to retrieve all comments made about the image currently shown in the modal
+        fetch(`/comments/${this.selectedImageId}`)
+            .then((comments) => comments.json())
+            .then((comments) => {
+                this.comments = comments.rows;
+            });
     },
-    template: `<div class="comments" style="position: fixed; z-index: 100; top: 0; left: 0">{{comment}}</div>`,
+    methods: {
+        addComment() {
+            fetch("/add-comment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: this.username,
+                    comment: this.comment,
+                    imageId: this.selectedImageId,
+                }),
+            })
+                .then((comment) => comment.json())
+                .then((comment) => {
+                    console.log("comment coming in: ", comment);
+                    // insert the newly uploaded image to the beginning of the images array
+                    this.comments.unshift(comment);
+                });
+        },
+    },
+    template: `<div id="comment-container">
+                    <div id="comments">
+                        <div v-if="comments.length > 0" v-for="comment in comments">
+                        <div class="comment">
+                            <p class="username">{{comment.username}} <span class="date">{{comment.publDate}}</span></p>
+                            <h5 class="comment-txt">{{comment.comment}}</h5>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="add-comment">
+                        <input v-model="username" name="username" type="text" placeholder="username">
+                        <input v-model="comment" name="comment" type="text" placeholder="comment here">
+                        <button @click="addComment">submit</button>
+                    </div>
+                </div>`,
 };

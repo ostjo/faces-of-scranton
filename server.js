@@ -106,7 +106,7 @@ app.get("/selected-image/:id", (req, res) => {
 app.get("/more-images/:smallestImageId", (req, res) => {
     const { smallestImageId } = req.params;
 
-    db.getNextImages(smallestImageId)
+    db.getImages(smallestImageId)
         .then((images) => {
             images.rows.forEach(
                 (row) => (row.publDate = moment(row.date).fromNow())
@@ -114,7 +114,37 @@ app.get("/more-images/:smallestImageId", (req, res) => {
             res.json(images);
         })
         .catch((err) => {
-            console.log("err in getNextImages() on GET /more-images/", err);
+            console.log("err in getImages() on GET /more-images/", err);
+            res.sendStatus(500);
+        });
+});
+
+app.get("/comments/:imageId", (req, res) => {
+    const { imageId } = req.params;
+    db.getComments(imageId)
+        .then((comments) => {
+            // format the date property to the "1 day ago" format via moment
+            // and store it in the publDate property
+            comments.rows.forEach(
+                (row) => (row.publDate = moment(row.date).fromNow())
+            );
+            res.json(comments);
+        })
+        .catch((err) => {
+            console.log("err in getComments() on GET /comments.json", err);
+            res.sendStatus(500);
+        });
+});
+
+app.post("/add-comment", (req, res) => {
+    const { imageId, username, comment } = req.body;
+
+    db.addComment(imageId, username, comment)
+        .then((comment) => {
+            res.json(comment.rows[0]);
+        })
+        .catch((err) => {
+            console.log("err in addComment on POST /add-comment", err);
             res.sendStatus(500);
         });
 });

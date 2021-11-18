@@ -28,7 +28,7 @@
                 <p>{{image.publDate}}</p>
             </div>
         </div>
-        <div class="load-more">
+        <div v-if="moreImages" class="load-more">
             <button @click="loadMore">load more</button>
         </div>
     </main>

@@ -72,6 +72,10 @@ h3 {
     margin: 10px 0;
 }
 
+h5 {
+    font-size: 1rem;
+}
+
 p {
     font-weight: 300;
 }
@@ -172,7 +176,7 @@ nav {
     padding: 30px;
     grid-column-gap: 25px;
     grid-template-columns: auto 400px;
-    grid-template-rows: 50px auto;
+    grid-template-rows: 50px auto 50px;
 }
 
 .lightbox img {
@@ -236,4 +240,27 @@ nav {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+}
+
+/*---------------------------------------- COMMENTS ---------------------------------------*/
+
+#comment-container {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid black;
+}
+
+#comments {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.comment {
+    border-bottom: 1px solid lightgrey;
+    padding: 12px 0;
+}
+
+.add-comment {
+    margin-top: 30px;
 }
