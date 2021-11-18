@@ -11,9 +11,10 @@ const db = spicedPg(
 console.log("[db] Connecting to: ", database);
 
 module.exports.getImages = () => {
-    const query = `SELECT images.url AS url, images.title AS title, images.created_at AS date, images.id AS id
+    const query = `SELECT url, title, created_at AS date, id
                     FROM images
-                    ORDER BY created_at DESC`;
+                    ORDER BY created_at DESC
+                    LIMIT 6`;
     return db.query(query);
 };
 
@@ -26,9 +27,20 @@ module.exports.addImage = (url, username, title, desc) => {
 };
 
 module.exports.getImageById = (id) => {
-    const query = `SELECT images.url AS url, images.title AS title, 
-                    images.description AS desc, images.username AS username, images.created_at AS date
+    const query = `SELECT url, title, desc, username, created_at AS date
                     FROM images
-                    WHERE images.id = $1`;
+                    WHERE id = $1`;
     return db.query(query, [id]);
+};
+
+module.exports.getNextImages = (smallestImageId) => {
+    const query = `SELECT url, title, id, created_at AS date,
+                        (SELECT id FROM images
+                        ORDER BY id ASC
+                        LIMIT 1) AS "lowestId"
+                    FROM images
+                    WHERE id < $1
+                    ORDER BY id DESC
+                    LIMIT 6`;
+    return db.query(query, [smallestImageId]);
 };

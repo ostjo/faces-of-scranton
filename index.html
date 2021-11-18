@@ -19,7 +19,7 @@
             <button @click="upload">upload</button>
         </div>
         <transition name="fade">
-            <image-modal v-if="selectedImageId" :id="selectedImageId" @close="closeModal"></image-modal>
+            <image-modal v-if="selectedImageId" :selected-image-id="selectedImageId" @close="closeModal"></image-modal>
         </transition>
         <div class="images">
             <div v-if="images.length > 0" v-for="image in images" @click="click(image.id)" class="image" >
@@ -27,6 +27,9 @@
                 <h3>{{image.title}}</h3>
                 <p>{{image.publDate}}</p>
             </div>
+        </div>
+        <div class="load-more">
+            <button @click="loadMore">load more</button>
         </div>
     </main>
     <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>

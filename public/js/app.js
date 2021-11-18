@@ -1,5 +1,5 @@
 import * as Vue from "./vue.js";
-import modal from "./modal.js";
+import modal from "./components/modal.js";
 
 Vue.createApp({
     data() {
@@ -50,13 +50,25 @@ Vue.createApp({
                 });
         },
         click(selectedImageId) {
-            console.log("click", this.selectedImageId);
             this.selectedImageId = selectedImageId;
+            console.log("click", this.selectedImageId);
             document.querySelector(".images").classList.add("blur");
         },
         closeModal() {
             this.selectedImageId = null;
             document.querySelector(".images").classList.remove("blur");
+        },
+        loadMore() {
+            // To get more images from the db:
+            // 1. get smallest id of currently shown images
+            const smallestImageId = this.images[this.images.length - 1].id;
+            // 2. make fetch GET request to server with smallestImageId
+            fetch(`/more-images/${smallestImageId}`)
+                .then((images) => images.json())
+                .then((images) => {
+                    console.log("the next images ", images);
+                    images.rows.forEach((image) => this.images.push(image));
+                });
         },
     },
 }).mount("#main");

@@ -1,3 +1,5 @@
+import comments from "./comments.js";
+
 export default {
     data() {
         return {
@@ -8,9 +10,12 @@ export default {
             date: "",
         };
     },
-    props: ["id"],
+    props: ["selectedImageId"],
+    components: {
+        "comments-modal": comments,
+    },
     mounted: function () {
-        fetch(`/selected-image/${this.id}`)
+        fetch(`/selected-image/${this.selectedImageId}`)
             .then((image) => image.json())
             .then((image) => {
                 this.url = image.url;
@@ -26,14 +31,15 @@ export default {
         },
     },
     template: `<div class="modal">
+                    <comments-modal :selected-image-id="selectedImageId"></comments-modal>
                     <div class="lightbox">
                         <img :src="url" :alt="title">
+                        <p>Uploaded by {{username}} {{date}}</p>
+                        <div @click="closeModal" class="close"></div>
                         <div>
-                            <div @click="closeModal" class="close"></div>
                             <h2>{{title}}</h2>
                             <h4>{{desc}}</h4>
                         </div>
-                        <p>Uploaded by {{username}} {{date}}</p>
                     </div>
                 </div>`,
 };

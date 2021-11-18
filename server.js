@@ -103,6 +103,22 @@ app.get("/selected-image/:id", (req, res) => {
         });
 });
 
+app.get("/more-images/:smallestImageId", (req, res) => {
+    const { smallestImageId } = req.params;
+
+    db.getNextImages(smallestImageId)
+        .then((images) => {
+            images.rows.forEach(
+                (row) => (row.publDate = moment(row.date).fromNow())
+            );
+            res.json(images);
+        })
+        .catch((err) => {
+            console.log("err in getNextImages() on GET /more-images/", err);
+            res.sendStatus(500);
+        });
+});
+
 app.get("*", (req, res) => {
     res.sendFile(`${__dirname}/index.html`);
 });

@@ -1,8 +1,52 @@
+/*------------------------------------ FONT IMPORT ------------------------------------*/
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-Light.woff2") format("woff2"),
+        url("fonts/Chivo-Light.woff") format("woff");
+    font-style: normal;
+    font-weight: 300;
+}
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-LightItalic.woff2") format("woff2"),
+        url("fonts/Chivo-LightItalic.woff") format("woff");
+    font-style: italic;
+    font-weight: 300;
+}
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-Regular.woff2") format("woff2"),
+        url("fonts/Chivo-Regular.woff") format("woff");
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-Italic.woff2") format("woff2"),
+        url("fonts/Chivo-Italic.woff") format("woff");
+    font-style: italic;
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-Medium.woff2") format("woff2"),
+        url("fonts/Chivo-Medium.woff") format("woff");
+    font-style: normal;
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Chivo";
+    src: url("fonts/Chivo-MediumItalic.woff2") format("woff2"),
+        url("fonts/Chivo-MediumItalic.woff") format("woff");
+    font-style: italic;
+    font-weight: 500;
+}
+
 /*------------------------------------ GENERAL SETUP ------------------------------------*/
 
 * {
     box-sizing: border-box;
-    font-family: system-ui;
+    font-family: "Chivo";
     margin: 0;
 }
 
@@ -12,8 +56,24 @@ body {
 
 /*------------------------------------ FONT STYLING ------------------------------------*/
 
+h1 {
+    font-weight: 500;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 400;
+}
+
 h3 {
     margin: 10px 0;
+}
+
+p {
+    font-weight: 300;
 }
 
 /*--------------------------------------- NAVBAR ---------------------------------------*/
@@ -79,6 +139,14 @@ nav {
     aspect-ratio: 1 / 1;
 }
 
+/*---------------------------------------- LOAD MORE ---------------------------------------*/
+
+.load-more {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
 /*---------------------------------------- MODAL ---------------------------------------*/
 
 .modal {
@@ -104,7 +172,7 @@ nav {
     padding: 30px;
     grid-column-gap: 25px;
     grid-template-columns: auto 400px;
-    grid-template-rows: 0.8fr 0.2fr;
+    grid-template-rows: 50px auto;
 }
 
 .lightbox img {
@@ -115,12 +183,15 @@ nav {
 }
 
 .lightbox p {
-    align-self: flex-end;
+    color: rgb(141, 141, 141);
+    letter-spacing: 0.03rem;
+    font-size: 0.9rem;
 }
 
 .close {
     position: absolute;
-    right: 30px;
+    right: 20px;
+    top: 20px;
     overflow: hidden;
     border: none;
     padding: 0;
