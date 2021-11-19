@@ -11,6 +11,8 @@ Vue.createApp({
             file: null,
             id: null,
             selectedImageId: location.pathname.slice(1),
+            nextId: null,
+            prevId: null,
             moreImages: undefined,
         };
     },
@@ -90,6 +92,15 @@ Vue.createApp({
             this.moreImages =
                 this.images[this.images.length - 1].id !==
                 images.rows[0].lowestId;
+        },
+        showNext(nextId) {
+            // set the selectedImageId to nextId
+            this.selectedImageId = nextId;
+            console.log(this.selectedImageId);
+        },
+        showPrev(prevId) {
+            this.selectedImageId = prevId;
+            console.log(this.selectedImageId);
         },
     },
 }).mount("#main");

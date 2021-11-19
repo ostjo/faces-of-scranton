@@ -31,7 +31,14 @@ module.exports.addImage = (url, username, title, desc) => {
 };
 
 module.exports.getImageById = (id) => {
-    const query = `SELECT url, title, description AS desc, username, created_at AS date
+    const query = `SELECT url, title, description AS desc, username, created_at AS date,
+                        (SELECT id FROM images
+                        WHERE id < $1
+                        ORDER BY id DESC
+                        LIMIT 1) AS "prevId",
+                        (SELECT id FROM images
+                        WHERE id > $1
+                        LIMIT 1) AS "nextId"
                     FROM images
                     WHERE id = $1`;
     return db.query(query, [id]);

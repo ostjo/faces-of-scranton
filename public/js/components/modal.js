@@ -9,6 +9,8 @@ export default {
             username: "",
             date: "",
             reqComplete: false,
+            prevId: null,
+            nextId: null,
         };
     },
     props: ["selectedImageId"],
@@ -16,39 +18,58 @@ export default {
         "comments-modal": comments,
     },
     mounted: function () {
-        fetch(`/selected-image/${this.selectedImageId}`)
-            .then((resp) => {
-                if (resp.status === 500) {
-                    // if someone passes a string instead a number, return null
-                    return null;
-                }
-                return resp.json();
-            })
-            .then((image) => {
-                if (image === null || image.rows.length === 0) {
-                    // the db did not find any image with the requested id, so close the modal and replace the state
-                    this.$emit("close");
-                    return history.replaceState({}, "", "/");
-                }
-                this.url = image.rows[0].url;
-                this.title = image.rows[0].title;
-                this.desc = image.rows[0].desc;
-                this.username = image.rows[0].username;
-                this.date = image.rows[0].publDate;
-
-                // keep track on whether the fetch is completely done and only render the modal
-                // as soon as the fetch is complete (prevents flickering)
-                this.reqComplete = true;
-            });
+        this.getImageById(this.selectedImageId);
+    },
+    watch: {
+        // whenever selectedImageId changes, this function will run
+        selectedImageId(id) {
+            this.getImageById(id);
+        },
     },
     methods: {
+        getImageById(id) {
+            fetch(`/selected-image/${id}`)
+                .then((resp) => {
+                    if (resp.status === 500) {
+                        // if someone passes a string instead a number, return null
+                        return null;
+                    }
+                    return resp.json();
+                })
+                .then((image) => {
+                    if (image === null || image.rows.length === 0) {
+                        // the db did not find any image with the requested id, so close the modal and replace the state
+                        this.$emit("close");
+                        return history.replaceState({}, "", "/");
+                    }
+                    this.url = image.rows[0].url;
+                    this.title = image.rows[0].title;
+                    this.desc = image.rows[0].desc;
+                    this.username = image.rows[0].username;
+                    this.date = image.rows[0].publDate;
+                    this.prevId = image.rows[0].prevId;
+                    this.nextId = image.rows[0].nextId;
+
+                    // keep track on whether the fetch is completely done and only render the modal
+                    // as soon as the fetch is complete (prevents flickering)
+                    this.reqComplete = true;
+
+                    console.log(this.prevId, this.selectedImageId, this.nextId);
+                });
+        },
         closeModal() {
             this.$emit("close");
             history.pushState({}, "", "/");
         },
+        showPrev() {
+            this.$emit("prev", this.prevId);
+        },
+        showNext() {
+            this.$emit("next", this.nextId);
+        },
     },
     template: `<div v-if="reqComplete" class="modal">
-                    <div class="arrow to-left">
+                    <div :style="{visibility: nextId != null ? 'visible' : 'hidden'}" class="arrow to-left" @click="showNext">
                         <img src="./images/arrow.svg">    
                     </div>
                     <div class="lightbox">
@@ -58,10 +79,11 @@ export default {
                         <div>
                             <h2>{{title}}</h2>
                             <h4>{{desc}}</h4>
+                            <p>{{nextId}}</p>
                         </div>
                         <comments-modal :selected-image-id="selectedImageId"></comments-modal>
                     </div>
-                    <div class="arrow">
+                    <div :style="{visibility: prevId != null ? 'visible' : 'hidden'}" class="arrow" @click="showPrev">
                         <img src="./images/arrow.svg">    
                     </div>
                 </div>`,

@@ -23,7 +23,7 @@
             <button class="light" @click="upload">upload</button>
         </div>
         <transition name="fade">
-            <image-modal v-if="selectedImageId" :selected-image-id="selectedImageId" @close="closeModal"></image-modal>
+            <image-modal v-if="selectedImageId" :selected-image-id="selectedImageId" @close="closeModal" @prev="showPrev" @next="showNext"></image-modal>
         </transition>
         <div class="images">
             <a v-if="images.length > 0" v-for="image in images" :href="`/${image.id}`" @click.prevent="click(image.id)" class="image" >
