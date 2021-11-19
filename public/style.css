@@ -50,15 +50,7 @@
     margin: 0;
 }
 
-body {
-    margin: 30px;
-}
-
 /*------------------------------------ FONT STYLING ------------------------------------*/
-
-h1 {
-    font-weight: 500;
-}
 
 h2,
 h3,
@@ -86,15 +78,52 @@ nav {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    margin-top: 120px;
-    background-color: white;
-    height: 90px;
-    width: 100vw;
+    left: 0.5vw;
+    z-index: 1;
+    margin-top: 20px;
+    background-color: black;
+    color: white;
+    width: 99vw;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 20px 25px;
+    border-radius: 10px;
+}
+
+nav h1 {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 3rem;
+    line-height: 0.95;
+}
+
+nav h1 span {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 5rem;
+    display: inline-block;
+    transform: translateX(-5px);
+}
+
+nav img {
+    height: 120px;
 }
 
 /*----------- UPLOAD INPUT FIELD ------------*/
+
+input {
+    font-size: 1.1rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-bottom: 2px solid white;
+    margin-right: 30px;
+    margin-bottom: 10px;
+}
+
+input:focus-visible {
+    outline: none;
+}
+
 .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -104,17 +133,28 @@ nav {
     z-index: -1;
 }
 
+label {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 155px;
+    height: 50px;
+}
+
 .inputfile + label {
     font-size: 1.25em;
+    padding: 10px 15px;
     font-weight: 700;
     color: white;
     background-color: black;
     display: inline-block;
+    border-radius: 200px;
+    border: 2px solid black;
+    transition: border ease-in-out 0.5s;
 }
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-    background-color: red;
+    border: 2px solid white;
     cursor: pointer;
 }
 
@@ -123,24 +163,74 @@ nav {
     outline: -webkit-focus-ring-color auto 5px;
 }
 
+.small-input {
+    width: calc(60vw / 2 - 15px);
+}
+
+.long-input {
+    width: 60vw;
+}
+
 #upload {
-    grid-column: 1 / -1;
-    margin-bottom: 40px;
+    width: 99vw;
+    height: 120px;
+    background-color: black;
+    margin-left: 0.5vw;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transform: translateY(-8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+}
+
+#upload div {
+    width: min-content;
+}
+
+button {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 200px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+button.dark {
+    border: 2px solid peachpuff;
+    background-color: peachpuff;
+}
+
+button.light {
+    border: 2px solid white;
+    background-color: white;
+}
+
+button.light:hover,
+button.dark:hover {
+    background-color: orangered;
+    border-color: orangered;
+    color: white;
 }
 
 /*---------------------------------------- IMAGES ---------------------------------------*/
 
 .images {
+    margin: 4px 0.5vw;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    max-width: 100vw;
-    grid-column-gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    max-width: 99vw;
+    grid-column-gap: 4px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .image > img {
     object-fit: cover;
     width: 100%;
     aspect-ratio: 1 / 1;
+    cursor: pointer;
 }
 
 /*---------------------------------------- LOAD MORE ---------------------------------------*/
@@ -175,8 +265,8 @@ nav {
     display: grid;
     padding: 30px;
     grid-column-gap: 25px;
-    grid-template-columns: auto 400px;
-    grid-template-rows: 50px auto 50px;
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: 50px 1fr 50px;
 }
 
 .lightbox img {
@@ -232,6 +322,12 @@ nav {
 
 .blur {
     filter: blur(34px);
+    opacity: 0.5;
+}
+
+.disable-scroll {
+    overflow: hidden;
+    height: 100vh;
 }
 
 .fade-enter-active,
@@ -248,10 +344,10 @@ nav {
     align-self: flex-end;
     display: flex;
     flex-direction: column;
-    border-top: 2px solid black;
 }
 
 #comments {
+    border-top: 2px solid black;
     max-height: 300px;
     overflow-y: scroll;
 }

@@ -18,7 +18,7 @@ module.exports.getImages = (smallestImageId) => {
                     FROM images
                     ${smallestImageId ? "WHERE id < $1" : ""}
                     ORDER BY created_at DESC
-                    LIMIT 9`;
+                    LIMIT 12`;
     return db.query(query, smallestImageId && [smallestImageId]);
 };
 

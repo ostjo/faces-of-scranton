@@ -8,6 +8,7 @@ export default {
             desc: "",
             username: "",
             date: "",
+            reqComplete: false,
         };
     },
     props: ["selectedImageId"],
@@ -16,21 +17,33 @@ export default {
     },
     mounted: function () {
         fetch(`/selected-image/${this.selectedImageId}`)
-            .then((image) => image.json())
+            .then((resp) => {
+                return resp.json();
+            })
             .then((image) => {
-                this.url = image.url;
-                this.title = image.title;
-                this.desc = image.desc;
-                this.username = image.username;
-                this.date = image.publDate;
+                if (image.rows.length === 0) {
+                    // the db did not find any image with the requested id, so close the modal and replace the state
+                    this.$emit("close");
+                    return history.replaceState({}, "", "/");
+                }
+                this.url = image.rows[0].url;
+                this.title = image.rows[0].title;
+                this.desc = image.rows[0].desc;
+                this.username = image.rows[0].username;
+                this.date = image.rows[0].publDate;
+
+                // keep track on whether the fetch is completely done and only render the modal
+                // as soon as the fetch is complete (prevents flickering)
+                this.reqComplete = true;
             });
     },
     methods: {
         closeModal() {
             this.$emit("close");
+            history.pushState({}, "", "/");
         },
     },
-    template: `<div class="modal">
+    template: `<div v-if="reqComplete" class="modal">
                     <div class="lightbox">
                         <img :src="url" :alt="title">
                         <p>Uploaded by {{username}} {{date}}</p>

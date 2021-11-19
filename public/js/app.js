@@ -10,7 +10,7 @@ Vue.createApp({
             username: "",
             file: null,
             id: null,
-            selectedImageId: null,
+            selectedImageId: location.pathname.slice(1),
             moreImages: undefined,
         };
     },
@@ -18,6 +18,12 @@ Vue.createApp({
         "image-modal": modal,
     },
     mounted: function () {
+        // we need the window to listen to the url changing and set the selectedImageId appropriately
+        // so that a rerendering is triggered
+        window.addEventListener(
+            "popstate",
+            () => (this.selectedImageId = location.pathname.slice(1))
+        );
         fetch("/images.json")
             .then((images) => images.json())
             .then((images) => {
@@ -54,11 +60,18 @@ Vue.createApp({
         click(selectedImageId) {
             this.selectedImageId = selectedImageId;
             console.log("click", this.selectedImageId);
+            history.pushState({}, "", `/${this.selectedImageId}`);
             document.querySelector(".images").classList.add("blur");
+            document.querySelector("nav").classList.add("blur");
+            document.querySelector("#upload").classList.add("blur");
+            document.querySelector("body").classList.add("disable-scroll");
         },
         closeModal() {
             this.selectedImageId = null;
             document.querySelector(".images").classList.remove("blur");
+            document.querySelector("nav").classList.remove("blur");
+            document.querySelector("#upload").classList.remove("blur");
+            document.querySelector("body").classList.remove("disable-scroll");
         },
         loadMore() {
             // To get more images from the db:

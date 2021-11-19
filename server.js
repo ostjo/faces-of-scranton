@@ -89,13 +89,13 @@ app.get("/images.json", (req, res) => {
 app.get("/selected-image/:id", (req, res) => {
     const { id } = req.params;
 
-    console.log("making request: ", req.params);
-
     db.getImageById(id)
         .then((image) => {
-            image.rows[0].publDate = moment(image.rows[0].date).fromNow();
+            if (image.rows.length !== 0) {
+                image.rows[0].publDate = moment(image.rows[0].date).fromNow();
+            }
             // we want to send back the newly uploaded image object to our client side
-            res.json(image.rows[0]);
+            res.json(image);
         })
         .catch((err) => {
             console.log("err in getImageById() on GET /selected-image/id", err);

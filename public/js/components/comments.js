@@ -37,8 +37,9 @@ export default {
         },
     },
     template: `<div id="comment-container">
-                    <div id="comments">
-                        <div v-if="comments.length > 0" v-for="comment in comments">
+                    <p>{{comments.length}} comments</p>
+                    <div v-if="comments.length > 0" id="comments">
+                        <div v-for="comment in comments">
                         <div class="comment">
                             <p class="username">{{comment.username}} <span class="date">{{comment.publDate}}</span></p>
                             <h5 class="comment-txt">{{comment.comment}}</h5>
@@ -48,7 +49,7 @@ export default {
                     <div class="add-comment">
                         <input v-model="username" name="username" type="text" placeholder="username">
                         <input v-model="comment" name="comment" type="text" placeholder="comment here">
-                        <button @click="addComment">submit</button>
+                        <button class="dark" @click="addComment">submit</button>
                     </div>
                 </div>`,
 };
