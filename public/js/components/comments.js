@@ -15,6 +15,11 @@ export default {
                 this.comments = comments.rows;
             });
     },
+    watch: {
+        selectedImageId(id) {
+            this.getCommentsById(id);
+        },
+    },
     methods: {
         addComment() {
             fetch("/add-comment", {
@@ -33,12 +38,22 @@ export default {
                     console.log("comment coming in: ", comment);
                     // insert the newly uploaded image to the beginning of the images array
                     this.comments.unshift(comment);
+                    this.username = "";
+                    this.comment = "";
+                });
+        },
+        getCommentsById(id) {
+            fetch(`/comments/${id}`)
+                .then((comments) => comments.json())
+                .then((comments) => {
+                    this.comments = comments.rows;
                 });
         },
     },
     template: `<div id="comment-container">
-                    <p>{{comments.length}} comments</p>
-                    <div v-if="comments.length > 0" id="comments">
+                    <p v-if="comments.length > 1 || comments.length === 0">{{comments.length}} comments</p>
+                    <p v-else>{{comments.length}} comment</p>
+                    <div v-if="comments.length > 0" id="comments" class="shadow">
                         <div v-for="comment in comments">
                         <div class="comment">
                             <p class="username">{{comment.username}} <span class="date">{{comment.publDate}}</span></p>
@@ -47,8 +62,8 @@ export default {
                     </div>
                     </div>
                     <div class="add-comment">
-                        <input v-model="username" name="username" type="text" placeholder="username">
-                        <input v-model="comment" name="comment" type="text" placeholder="comment here">
+                        <input class="username-input" v-model="username" name="username" type="text" placeholder="username">
+                        <input class="comment-input" v-model="comment" name="comment" type="text" placeholder="comment here">
                         <button class="dark" @click="addComment">submit</button>
                     </div>
                 </div>`,

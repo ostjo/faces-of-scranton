@@ -1,52 +1,8 @@
-/*------------------------------------ FONT IMPORT ------------------------------------*/
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-Light.woff2") format("woff2"),
-        url("fonts/Chivo-Light.woff") format("woff");
-    font-style: normal;
-    font-weight: 300;
-}
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-LightItalic.woff2") format("woff2"),
-        url("fonts/Chivo-LightItalic.woff") format("woff");
-    font-style: italic;
-    font-weight: 300;
-}
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-Regular.woff2") format("woff2"),
-        url("fonts/Chivo-Regular.woff") format("woff");
-    font-style: normal;
-    font-weight: 400;
-}
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-Italic.woff2") format("woff2"),
-        url("fonts/Chivo-Italic.woff") format("woff");
-    font-style: italic;
-    font-weight: 400;
-}
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-Medium.woff2") format("woff2"),
-        url("fonts/Chivo-Medium.woff") format("woff");
-    font-style: normal;
-    font-weight: 500;
-}
-@font-face {
-    font-family: "Chivo";
-    src: url("fonts/Chivo-MediumItalic.woff2") format("woff2"),
-        url("fonts/Chivo-MediumItalic.woff") format("woff");
-    font-style: italic;
-    font-weight: 500;
-}
-
 /*------------------------------------ GENERAL SETUP ------------------------------------*/
 
 * {
     box-sizing: border-box;
-    font-family: "Chivo";
+    font-family: "Chivo", sans-serif;
     margin: 0;
 }
 
@@ -64,12 +20,20 @@ h3 {
     margin: 10px 0;
 }
 
+h4 {
+    margin-bottom: 30px;
+}
+
 h5 {
     font-size: 1rem;
 }
 
 p {
     font-weight: 300;
+}
+
+a {
+    text-decoration: none;
 }
 
 /*--------------------------------------- NAVBAR ---------------------------------------*/
@@ -173,7 +137,7 @@ label {
 
 #upload {
     width: 99vw;
-    height: 120px;
+    height: 170px;
     background-color: black;
     margin-left: 0.5vw;
     border-bottom-left-radius: 10px;
@@ -185,7 +149,7 @@ label {
     padding: 20px 25px;
 }
 
-#upload div {
+#upload > div {
     width: min-content;
 }
 
@@ -212,6 +176,35 @@ button.dark:hover {
     background-color: orangered;
     border-color: orangered;
     color: white;
+}
+
+.tags {
+    display: flex;
+    width: 100%;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    color: white;
+    background-color: blue;
+    padding: 5px 12px 5px 20px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 9px;
+}
+
+.tag.xs {
+    padding: 5px 15px;
+    height: 34px;
+}
+
+.tag span {
+    font-weight: 200;
+    letter-spacing: 0.05rem;
+    font-size: 0.9rem;
 }
 
 /*---------------------------------------- IMAGES ---------------------------------------*/
@@ -291,20 +284,27 @@ button.dark:hover {
 }
 
 .close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
+    position: relative;
     overflow: hidden;
     border: none;
     padding: 0;
-    width: 2em;
-    height: 2em;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     background: transparent;
-    color: black;
+    color: white;
     font: inherit;
     text-indent: 100%;
     cursor: pointer;
+}
+
+.close.absolute {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: black;
+    width: 2em;
+    height: 2em;
 }
 
 .close:before,
@@ -322,10 +322,6 @@ button.dark:hover {
 
 .close:after {
     transform: rotate(-45deg);
-}
-
-.close:hover {
-    transform: scale(1.05);
 }
 
 .blur {
@@ -356,8 +352,28 @@ button.dark:hover {
 
 #comments {
     border-top: 2px solid black;
-    max-height: 300px;
+    max-height: 220px;
     overflow-y: scroll;
+}
+
+#comments.shadow {
+    background: rgb(255, 255, 255);
+    background: -moz-linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 1) 90%,
+        rgba(237, 237, 237, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 1) 90%,
+        rgba(237, 237, 237, 1) 100%
+    );
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 1) 90%,
+        rgba(237, 237, 237, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#ededed",GradientType=1);
 }
 
 .comment {
@@ -365,6 +381,20 @@ button.dark:hover {
     padding: 12px 0;
 }
 
+.add-comment > .username-input {
+    background-color: white;
+    border-bottom: 2px solid lightgray;
+    padding: 5px;
+    color: black;
+}
+
+.add-comment > .comment-input {
+    width: 100%;
+    background-color: #f3f3f3;
+    padding: 8px;
+    color: black;
+}
+
 .add-comment {
-    margin-top: 30px;
+    margin-top: 20px;
 }

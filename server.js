@@ -47,14 +47,25 @@ app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     if (req.file) {
         // once we're successfully uploaded to the cloud, we want to
         // add a new image to the database!
-        const { title, desc, username } = req.body;
+        const { title, desc, username, tags } = req.body;
         const url = `https://s3.amazonaws.com/spicedling/` + req.file.filename;
+
+        const tagsArr = tags.split(",");
 
         db.addImage(url, username, title, desc)
             .then((image) => {
                 image.rows[0].publDate = moment(
                     image.rows[0].created_at
                 ).fromNow();
+
+                return image.rows[0].id;
+            })
+            .then((imageId) =>
+                Promise.all(tagsArr.map((tag) => db.addTag(imageId, tag)))
+            )
+            .then((tags) => tags[0].rows[0].id)
+            .then((imageId) => db.getImageById(imageId))
+            .then((image) => {
                 // we want to send back the newly uploaded image object to our client side
                 res.json(image.rows[0]);
             })
@@ -89,13 +100,17 @@ app.get("/images.json", (req, res) => {
 app.get("/selected-image/:id", (req, res) => {
     const { id } = req.params;
 
-    db.getImageById(id)
-        .then((image) => {
+    Promise.all([db.getImageById(id), db.getTagsById(id)])
+        .then((results) => {
+            const image = results[0];
+            const tags = results[1];
+
             if (image.rows.length !== 0) {
                 image.rows[0].publDate = moment(image.rows[0].date).fromNow();
             }
+
             // we want to send back the newly uploaded image object to our client side
-            res.json(image);
+            res.json([image, tags]);
         })
         .catch((err) => {
             console.log("err in getImageById() on GET /selected-image/id", err);
@@ -115,6 +130,21 @@ app.get("/more-images/:smallestImageId", (req, res) => {
         })
         .catch((err) => {
             console.log("err in getImages() on GET /more-images/", err);
+            res.sendStatus(500);
+        });
+});
+
+app.get("/filter-images/:tag", (req, res) => {
+    const { tag } = req.params;
+    db.getImagesByTag(tag)
+        .then((images) => {
+            images.rows.forEach(
+                (row) => (row.publDate = moment(row.date).fromNow())
+            );
+            res.json(images);
+        })
+        .catch((err) => {
+            console.log("err in getImagesByTag() on GET /filter-images/", err);
             res.sendStatus(500);
         });
 });

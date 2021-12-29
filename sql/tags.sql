@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS tags;
+
+CREATE TABLE tags(
+    id SERIAL PRIMARY KEY,
+    image_id INTEGER NOT NULL REFERENCES images(id),
+    tag VARCHAR(30)
+);
