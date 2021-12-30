@@ -1,3 +1,3 @@
-## Faces of Scranton
+# Faces of Scranton
 
-# SPA using Vue.js
+## SPA using Vue.js
